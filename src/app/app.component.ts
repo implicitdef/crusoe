@@ -52,7 +52,7 @@ import { AppState } from './app.service';
       <span>WebPack Angular 2 Starter by <a [href]="url">@AngularClass</a></span>
       <div>
         <a [href]="url">
-          <img [src]="angularclassLogo" width="25%">
+          <img [src]="angularclassLogo" width="3%">
         </a>
       </div>
     </footer>
