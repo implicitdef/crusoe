@@ -1,9 +1,9 @@
-import { WebpackAsyncRoute } from '@angularclass/webpack-toolkit';
-import { RouterConfig } from '@angular/router';
-import { Home } from './home';
-import { NoContent } from './no-content';
-
-import { DataResolver } from './app.resolver';
+import {WebpackAsyncRoute} from "@angularclass/webpack-toolkit";
+import {RouterConfig} from "@angular/router";
+import {Home} from "./home";
+import {DataResolver} from "./app.resolver";
+import {Spain} from "./spain/spain";
+import {NoContent} from "./no-content/no-content";
 
 export const routes: RouterConfig = [
   { path: '',      component: Home },
@@ -19,6 +19,7 @@ export const routes: RouterConfig = [
     children: [
       { path: '', component: 'Index' }  // must be included
     ]},
+  { path: 'spain',    component: Spain },
   { path: '**',    component: NoContent },
 ];
 
