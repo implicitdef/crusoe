@@ -24,7 +24,6 @@ export class Scene implements AfterViewInit, DoCheck {
   @Input() state: GameState;
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
-  currentFrame: Number;
 
   constructor(private ngZone: NgZone) {}
 
@@ -38,11 +37,8 @@ export class Scene implements AfterViewInit, DoCheck {
   }
 
   askForRedraw = () => {
-    if (this.currentFrame) {
-      //cancelAnimationFrame(this.currentFrame);
-    }
     this.ngZone.runOutsideAngular(() => {
-      this.currentFrame = requestAnimationFrame(this.redraw);
+      requestAnimationFrame(this.redraw);
     });
   };
 
@@ -64,76 +60,45 @@ export class Scene implements AfterViewInit, DoCheck {
             y: tileY + this.state.viewportOrigin.y - ((this.state.tilesInViewport - 1)/2)
           };
           let material = this.state.whatsAtMemoized(tileInGameLocation);
+          let shipIsThere = this.state.isShipThere(tileInGameLocation);
+
           for (let dotX = 0; dotX < dotsPerTile; dotX++){
             for (let dotY = 0; dotY < dotsPerTile; dotY++){
 
               let color;
-              let pattern = this.getPatternForMaterial(material);
-              if (usePatterns && pattern){
-                color = pattern[dotY][dotX];
+              if (shipIsThere && (dotX == 1 || dotX == 2) && (dotY == 1 || dotY == 2)){
+                color = '#420';
+              } else if (material == Material.Grass) {
+                color = (dotX + dotY) % 2 == 0 ? '#151' : '#797';
+              } else if (material == Material.Sand) {
+                color = (dotX + dotY) % 2 == 0 ? '#fec' : '#dca';
+              } else if (material == Material.Shallows) {
+                color = (dotX + dotY) % 2 == 0 ? '#ade' : '#9bd';
               } else {
-                if (material == Material.Grass) {
-                  color = dotX == dotY ? '#151' : '#797';
-                } else if (material == Material.Shallows) {
-                  color = (dotX + dotY) % 2 == 0 ? '#cde' : '#abd';
-                } else {
-                  color = (dotX + dotY) % 2 == 0 ? '#88d' : '#99c';
-                }
+                color = (dotX + dotY) % 2 == 0 ? '#78d' : '#89c';
               }
               this.ctx.fillStyle = color;
               let drawingStartX = Math.floor(tileX * (pixelsByDot * dotsPerTile) + dotX * pixelsByDot);
               let drawingStartY = Math.floor(tileY * (pixelsByDot * dotsPerTile) + dotY * pixelsByDot);
               this.ctx.fillRect(drawingStartX, drawingStartY, Math.ceil(pixelsByDot), Math.ceil(pixelsByDot));
+
             }
+          }
+          if (shipIsThere) {
+            let drawingStartX = Math.floor(tileX * (pixelsByDot * dotsPerTile));
+            let drawingStartY = Math.floor(tileY * (pixelsByDot * dotsPerTile));
+            let size = Math.ceil(pixelsByDot * dotsPerTile);
+            let half = size/2;
+            let radius = size/3;
+            this.ctx.beginPath();
+            this.ctx.arc(drawingStartX + half, drawingStartY + half, radius, 0, 2 * Math.PI, false);
+            this.ctx.fillStyle = '#420';
+            this.ctx.fill();
           }
         }
       }
     }
   };
 
-
-  private getPatternForMaterial = (m: Material): string[][] => {
-    if (m == Material.Water){
-      let _ = '#458';
-      let O = '#79c';
-      return [
-        [_,_,_,O,_,O,_],
-        [_,_,_,O,_,O,_],
-        [_,_,O,O,_,_,O],
-        [O,_,O,_,_,_,O],
-        [O,O,O,_,_,_,_],
-        [_,O,_,_,O,_,_],
-        [_,_,_,_,O,O,_]
-      ]
-    }
-    if (m == Material.Shallows){
-      let _ = '#88b';
-      let O = '#9bd';
-      //let O = 'red';
-      return [
-        [_,_,_,_,O,O,_],
-        [_,_,O,O,O,O,O],
-        [O,O,O,O,O,O,O],
-        [O,O,O,O,_,_,O],
-        [O,O,_,_,_,_,_],
-        [_,_,_,_,_,_,_],
-        [_,_,_,_,_,_,_]
-      ]
-    }
-    if (m == Material.Grass){
-      let _ = '#454';
-      let O = '#343';
-      return [
-        [_,O,_,O,_,O,_],
-        [O,_,O,_,O,_,O],
-        [_,O,_,O,_,O,_],
-        [O,_,O,_,O,_,O],
-        [_,O,_,O,_,O,_],
-        [O,_,O,_,O,_,O],
-        [_,O,_,O,_,O,_]
-      ]
-    }
-    return undefined;
-  }
 
 }

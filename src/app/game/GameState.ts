@@ -25,11 +25,14 @@ export class GameState {
     row[loc.y] = material;
   };
 
-
   constructor (){
     this.lib.seed(Math.random());
   }
 
+
+  isShipThere = (loc: Loc) => {
+    return this.areTheSame(loc, this.viewportOrigin);
+  }
 
   whatsAtMemoized = (loc: Loc): Material => {
     let mat = this.getMemoizedMaterial(loc);
@@ -46,8 +49,10 @@ export class GameState {
       loc.x/30,
       loc.y/30
     ) + 1) / 2;
-    if (noiseValue > 0.7)
+    if (noiseValue > 0.72)
       return Material.Grass;
+    if (noiseValue > 0.7)
+      return Material.Sand;
     if (noiseValue > 0.55)
       return Material.Shallows;
     return Material.Water;
@@ -66,6 +71,7 @@ export interface Loc {
 export const enum Material {
   Grass,
   Shallows,
-  Water
+  Water,
+  Sand
 }
 
