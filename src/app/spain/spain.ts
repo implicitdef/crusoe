@@ -1,30 +1,15 @@
 import {Component, ViewChild, ElementRef, AfterViewInit} from "@angular/core";
-import {GameState} from "../game/GameState";
-import {Scene} from "../game/scene.component";
+import {Capsule} from "../game/capsule.component";
 
 @Component({
   selector: 'spain',
-  directives : [Scene],
+  directives : [Capsule],
   template: `
     <div class="spain">
-      <p>In spain</p>
-      <scene [state]="state"></scene>
+      <capsule></capsule>
     </div>
   `
 })
-export class Spain implements AfterViewInit {
-  constructor(private state: GameState){}
-
-  paramValue = 33;
-
-  ngAfterViewInit() {
-    window.setTimeout(() => {
-      this.state.numberOfIslands = 55;
-    }, 3000);
-  }
-
-}
-
-
+export class Spain {}
 
 

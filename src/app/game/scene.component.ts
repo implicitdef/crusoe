@@ -12,9 +12,14 @@ import {GameState} from "./GameState";
 
 @Component({
   selector : 'scene',
-  template : `<canvas width="400" height="100" #canvas></canvas>`
+  styles : [` canvas { 
+     border : 1px solid red
+  }`],
+  template : `<canvas height="{{height}}" width="{{width}}" #canvas></canvas>`
 })
 export class Scene implements AfterViewInit, DoCheck {
+  @Input() width: Number;
+  @Input() height: Number;
   @Input() state: GameState;
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
