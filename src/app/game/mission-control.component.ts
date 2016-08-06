@@ -1,5 +1,9 @@
 import {Component} from "@angular/core";
 import {GameState} from "./GameState";
+import {Renderer} from "@angular/core";
+import {OnDestroy} from "@angular/core";
+import {OnInit} from "@angular/core";
+import {AfterViewInit} from "@angular/core";
 
 
 
@@ -36,8 +40,38 @@ import {GameState} from "./GameState";
     </ul>
 `
 })
-export class MissionControl {
-  constructor(private gameState: GameState){}
+export class MissionControl implements OnDestroy, OnInit {
+  destroyKeyboardListener: Function;
+
+  constructor(private gameState: GameState, private renderer: Renderer){}
+
+  ngOnInit() {
+    this.destroyKeyboardListener = this.renderer.listenGlobal('document', 'keydown', (event: KeyboardEvent) => {
+      if (event.keyCode == 37 || event.key == 'a'){
+        //left
+        this.gameState.viewportOrigin.x --;
+        event.preventDefault();
+      } else if (event.keyCode == 38 || event.key == 'w') {
+        //up
+        this.gameState.viewportOrigin.y --;
+        event.preventDefault();
+      } else if (event.keyCode == 39 || event.key == 'd') {
+        //right
+        this.gameState.viewportOrigin.x ++;
+        event.preventDefault();
+      } else if (event.keyCode == 40 || event.key == 's') {
+        //down
+        this.gameState.viewportOrigin.y ++;
+        event.preventDefault();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.destroyKeyboardListener)
+      this.destroyKeyboardListener();
+  }
+
 
   updateTilesInViewport = (event: any) => {
     this.gameState.tilesInViewport = parseInt(event.target.value);

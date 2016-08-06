@@ -23,17 +23,11 @@ export class GameState {
       row = this.materialsMemoized[loc.x] = [];
     }
     row[loc.y] = material;
-    console.log(this.materialsMemoized);
   };
 
 
   constructor (){
     this.lib.seed(Math.random());
-    window.setTimeout(() => {
-      console.log(this.lib.perlin2(10.33, 10));
-      console.log(this.lib.perlin2(11, 30));
-      console.log(this.lib.perlin2(11, 100));
-    }, 1000);
   }
 
 
