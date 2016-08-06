@@ -42,8 +42,8 @@ import { AppState } from './app.service';
       </span>
       |
       <span>
-        <a [routerLink]=" ['./spain'] ">
-          Spain
+        <a [routerLink]=" ['./experiment'] ">
+          Experiment
         </a>
       </span>
     </nav>

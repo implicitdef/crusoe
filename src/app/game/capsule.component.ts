@@ -9,7 +9,6 @@ import {OnInit} from "@angular/core";
   directives : [Scene],
   styles : [`div {
     border : 1px solid green;
-    margin : 30px;
     min-height : 300px;
     height: 70vh;
   }`],
