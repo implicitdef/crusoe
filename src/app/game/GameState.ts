@@ -7,7 +7,7 @@ export class GameState {
 
   // must be event !
   tilesInViewport = 15;
-  dotsPerTile = 4;
+
   viewportOrigin: Loc = {x: 0, y: 0};
   private lib = new PerlinNoiseLib();
   private materialsMemoized: Material[][] = [];
