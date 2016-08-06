@@ -8,25 +8,23 @@ import {Input} from "@angular/core";
 import {DoCheck} from "@angular/core";
 import {ChangeDetectionStrategy} from "@angular/core";
 import {NgZone} from "@angular/core";
-import {GameState} from "./GameState";
+import {GameState, Loc, Material} from "./GameState";
 
 @Component({
   selector : 'scene',
   styles : [` canvas { 
-     border : 1px solid red
+     border : 2px solid black
   }`],
   template : `<canvas height="{{sizeInPixels}}" width="{{sizeInPixels}}" #canvas></canvas>`
 })
 export class Scene implements AfterViewInit, DoCheck {
-  @Input() sizeInPixels: Number;
+  @Input() sizeInPixels: number;
   @Input() state: GameState;
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
   currentFrame: Number;
 
-  constructor(private ngZone: NgZone) {
-    console.log(`ngZone : ${ngZone}`);
-  }
+  constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit() {
     this.ctx = this.canvas.nativeElement.getContext("2d");
@@ -55,33 +53,31 @@ export class Scene implements AfterViewInit, DoCheck {
 
       for (let tileX = 0; tileX < this.state.tilesInViewport; tileX++){
         for (let tileY = 0; tileY < this.state.tilesInViewport; tileY++){
+          let tileInGameLocation: Loc = {
+            x : tileX + this.state.viewportOrigin.x - ((this.state.tilesInViewport - 1)/2),
+            y: tileY + this.state.viewportOrigin.y - ((this.state.tilesInViewport - 1)/2)
+          };
+          let material = this.state.whatsAt(tileInGameLocation);
+
+
           for (let dotX = 0; dotX < this.state.dotsPerTile; dotX++){
             for (let dotY = 0; dotY < this.state.dotsPerTile; dotY++){
 
-              let color = ((tileX + tileY) % 2 == 0) ? (
-                ((dotX + dotY) % 2 == 0) ? '#eee' : '#ddd'
+              let color = (material == Material.Grass) ? (
+                ((dotX + dotY) % 2 == 0) ? '#151' : '#797'
               ): (
                 ((dotX + dotY) % 2 == 0) ? '#ccf' : '#bbe'
               );
+
               this.ctx.fillStyle = color;
-
-
-              let drawingStartX = tileX * (pixelsByDot * this.state.dotsPerTile) + dotX * pixelsByDot;
-              let drawingStartY = tileY * (pixelsByDot * this.state.dotsPerTile) + dotY * pixelsByDot;
-              this.ctx.fillRect(drawingStartX, drawingStartY, pixelsByDot, pixelsByDot);
-
-
+              let drawingStartX = Math.floor(tileX * (pixelsByDot * this.state.dotsPerTile) + dotX * pixelsByDot);
+              let drawingStartY = Math.floor(tileY * (pixelsByDot * this.state.dotsPerTile) + dotY * pixelsByDot);
+              this.ctx.fillRect(drawingStartX, drawingStartY, Math.ceil(pixelsByDot), Math.ceil(pixelsByDot));
 
             }
           }
         }
       }
-
-
-
-      this.ctx.fillStyle = "gray";
-      this.ctx.fillText(`Hello World. There are ${this.state.numberOfIslands} island(s)`, 10, 10);
-      this.ctx.fillText(`Hello World. There are ${this.state.tilesInViewport} tiles in viewport`, 10, 50);
     }
   };
 

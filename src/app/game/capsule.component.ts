@@ -8,7 +8,6 @@ import {OnInit} from "@angular/core";
   selector: 'capsule',
   directives : [Scene],
   styles : [`div {
-    border : 1px solid green;
     min-height : 300px;
     height: 70vh;
   }`],

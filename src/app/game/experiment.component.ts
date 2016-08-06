@@ -9,7 +9,7 @@ import {MissionControl} from "./mission-control.component";
   styles : [`
     div { 
       border : 1px solid purple;
-      padding:0 30px;
+      padding:10px 30px;
     }`
   ],
   template: `

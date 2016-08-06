@@ -12,28 +12,41 @@ import {GameState} from "./GameState";
   `],
   template : `
     <ul>
-      <li>
-        <label>
-          Number of islands
-          <input type="range" [(ngModel)]="gameState.numberOfIslands" min="0" max="100"> 
-        </label>
-      </li>
-      <li>
-        <label>
-          Tiles in viewport
-          <input type="range" [(ngModel)]="gameState.tilesInViewport" min="5" max="50"> 
-        </label>
-      </li>
-      <li>
-        <label>
-          Dots pet tile
-          <input type="range" [(ngModel)]="gameState.dotsPerTile" min="3" max="7"> 
-        </label>
-      </li>
+      <li><label> Tiles in viewport
+          <input
+            type="range"
+            [ngModel]="gameState.tilesInViewport"
+            (input)="updateTilesInViewport($event)"
+            min="3" max="55" step="2"> 
+      </label></li>
+       <li><label> Viewport X
+          <input
+            type="range"
+            [ngModel]="gameState.viewportOrigin.x"
+            (input)="updateViewportOriginX($event)"
+            min="-20" max="20"> 
+      </label></li>
+      <li><label> Viewport Y
+          <input
+            type="range"
+            [ngModel]="gameState.viewportOrigin.y"
+            (input)="updateViewportOriginY($event)"
+            min="-20" max="20"> 
+      </label></li>
     </ul>
 `
 })
 export class MissionControl {
   constructor(private gameState: GameState){}
-  //numberOfIslands = 50;
+
+  updateTilesInViewport = (event: any) => {
+    this.gameState.tilesInViewport = parseInt(event.target.value);
+  };
+  updateViewportOriginX = (event: any) => {
+    this.gameState.viewportOrigin.x = parseInt(event.target.value);
+  };
+  updateViewportOriginY = (event: any) => {
+    this.gameState.viewportOrigin.y = parseInt(event.target.value);
+  };
+
 }
