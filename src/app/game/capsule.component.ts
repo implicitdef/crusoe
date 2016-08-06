@@ -14,7 +14,7 @@ import {OnInit} from "@angular/core";
   }`],
   template: `
     <div #div>
-      <scene [width]="width" [height]="height" [state]="state"></scene>
+      <scene [sizeInPixels]="canvasSize" [state]="state"></scene>
     </div>
   `
 })
@@ -37,8 +37,6 @@ export class Capsule implements OnInit {
     let capsuleW = this.div.nativeElement.clientWidth;
     let capsuleH = this.div.nativeElement.clientHeight;
     this.canvasSize = Math.min(capsuleW, capsuleH);
-    this.width = this.canvasSize;
-    this.height = this.canvasSize;
   }
 
 }

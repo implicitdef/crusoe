@@ -1,9 +1,11 @@
 
 import {Component} from "@angular/core";
 import {Capsule} from "./capsule.component";
+import {MissionControl} from "./mission-control.component";
+
 @Component({
   selector: 'experiment',
-  directives : [Capsule],
+  directives : [Capsule, MissionControl],
   styles : [`
     div { 
       border : 1px solid purple;
@@ -13,6 +15,7 @@ import {Capsule} from "./capsule.component";
   template: `
     <div>
       <h3>Experiment</h3>
+      <mission-control></mission-control>
       <capsule></capsule>
     </div>
   `

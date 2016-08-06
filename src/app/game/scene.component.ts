@@ -15,14 +15,14 @@ import {GameState} from "./GameState";
   styles : [` canvas { 
      border : 1px solid red
   }`],
-  template : `<canvas height="{{height}}" width="{{width}}" #canvas></canvas>`
+  template : `<canvas height="{{sizeInPixels}}" width="{{sizeInPixels}}" #canvas></canvas>`
 })
 export class Scene implements AfterViewInit, DoCheck {
-  @Input() width: Number;
-  @Input() height: Number;
+  @Input() sizeInPixels: Number;
   @Input() state: GameState;
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
+  currentFrame: Number;
 
   constructor(private ngZone: NgZone) {
     console.log(`ngZone : ${ngZone}`);
@@ -38,20 +38,50 @@ export class Scene implements AfterViewInit, DoCheck {
   }
 
   askForRedraw = () => {
+    if (this.currentFrame) {
+      //cancelAnimationFrame(this.currentFrame);
+    }
     this.ngZone.runOutsideAngular(() => {
-      requestAnimationFrame(this.redraw);
+      this.currentFrame = requestAnimationFrame(this.redraw);
     });
   };
 
   redraw = () => {
-    console.log(`redrawing`);
-
     if (this.ctx) {
-      this.ctx.clearRect(0, 0, 400, 400);
-      this.ctx.fillStyle = "lightgray";
-      this.ctx.fillRect(0, 0, 100, 100);
+      this.ctx.clearRect(0, 0, this.sizeInPixels, this.sizeInPixels);
+
+      let pixelsByTile = (this.sizeInPixels / this.state.tilesInViewport);
+      let pixelsByDot = (pixelsByTile / this.state.dotsPerTile);
+
+      for (let tileX = 0; tileX < this.state.tilesInViewport; tileX++){
+        for (let tileY = 0; tileY < this.state.tilesInViewport; tileY++){
+          for (let dotX = 0; dotX < this.state.dotsPerTile; dotX++){
+            for (let dotY = 0; dotY < this.state.dotsPerTile; dotY++){
+
+              let color = ((tileX + tileY) % 2 == 0) ? (
+                ((dotX + dotY) % 2 == 0) ? '#eee' : '#ddd'
+              ): (
+                ((dotX + dotY) % 2 == 0) ? '#ccf' : '#bbe'
+              );
+              this.ctx.fillStyle = color;
+
+
+              let drawingStartX = tileX * (pixelsByDot * this.state.dotsPerTile) + dotX * pixelsByDot;
+              let drawingStartY = tileY * (pixelsByDot * this.state.dotsPerTile) + dotY * pixelsByDot;
+              this.ctx.fillRect(drawingStartX, drawingStartY, pixelsByDot, pixelsByDot);
+
+
+
+            }
+          }
+        }
+      }
+
+
+
       this.ctx.fillStyle = "gray";
       this.ctx.fillText(`Hello World. There are ${this.state.numberOfIslands} island(s)`, 10, 10);
+      this.ctx.fillText(`Hello World. There are ${this.state.tilesInViewport} tiles in viewport`, 10, 50);
     }
   };
 
