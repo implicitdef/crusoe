@@ -10,32 +10,40 @@ import {AfterViewInit} from "@angular/core";
 @Component({
   selector : 'mission-control',
   styles : [`
+    ul {
+      outline: 0px dashed darkslategray;
+      margin: 10px auto;
+      max-width : 400px;
+    }
     li {
       list-style-type: circle;
     }
   `],
   template : `
     <ul>
-      <li><label> Tiles in viewport
-          <input
+      <li><label>
+        <input
             type="range"
             [ngModel]="gameState.tilesInViewport"
             (input)="updateTilesInViewport($event)"
-            min="3" max="55" step="2"> 
+            min="3" max="55" step="2"/> 
+          Tiles in viewport
       </label></li>
-       <li><label> Viewport X
+       <li><label>
           <input
             type="range"
             [ngModel]="gameState.viewportOrigin.x"
             (input)="updateViewportOriginX($event)"
-            min="-20" max="20"> 
+            min="-20" max="20"/> 
+          Viewport X
       </label></li>
-      <li><label> Viewport Y
+      <li><label>
           <input
             type="range"
             [ngModel]="gameState.viewportOrigin.y"
             (input)="updateViewportOriginY($event)"
-            min="-20" max="20"> 
+            min="-20" max="20"/>
+          Viewport Y
       </label></li>
     </ul>
 `

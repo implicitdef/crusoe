@@ -43,8 +43,8 @@ export class GameState {
 
   private whatsAtDynamic = (loc: Loc): Material => {
     let noiseValue = (this.lib.perlin2(
-      loc.x/10,
-      loc.y/10
+      loc.x/30,
+      loc.y/30
     ) + 1) / 2;
     if (noiseValue > 0.7)
       return Material.Grass;

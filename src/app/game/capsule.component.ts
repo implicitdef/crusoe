@@ -10,6 +10,7 @@ import {OnInit} from "@angular/core";
   styles : [`div {
     min-height : 300px;
     height: 70vh;
+    border: 0px dashed firebrick;
   }
   `],
   template: `
@@ -34,6 +35,7 @@ export class Capsule implements OnInit {
   }
 
   refreshCanvasSize = () => {
+    let canvasBorderSize = 2;
     let capsuleW = this.div.nativeElement.clientWidth;
     let capsuleH = this.div.nativeElement.clientHeight;
     this.canvasSize = Math.min(capsuleW, capsuleH);

@@ -8,13 +8,15 @@ import {MissionControl} from "./mission-control.component";
   directives : [Capsule, MissionControl],
   styles : [`
     div { 
-      border : 1px solid purple;
+      outline : 0px dashed purple;
       padding:10px 30px;
-    }`
+    }
+    h2 { text-align: center}    
+    `
   ],
   template: `
     <div>
-      <h3>Experiment</h3>
+      <h2>Experiment</h2>
       <mission-control></mission-control>
       <capsule></capsule>
     </div>

@@ -13,7 +13,9 @@ import {GameState, Loc, Material} from "./GameState";
 @Component({
   selector : 'scene',
   styles : [` canvas { 
-     border : 2px solid black
+     display : block;
+     margin: 0 auto;
+     outline : 2px solid black;
   }`],
   template : `<canvas height="{{sizeInPixels}}" width="{{sizeInPixels}}" #canvas></canvas>`
 })
