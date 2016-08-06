@@ -10,7 +10,8 @@ import {OnInit} from "@angular/core";
   styles : [`div {
     min-height : 300px;
     height: 70vh;
-  }`],
+  }
+  `],
   template: `
     <div #div>
       <scene [sizeInPixels]="canvasSize" [state]="state"></scene>

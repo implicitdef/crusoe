@@ -57,23 +57,21 @@ export class Scene implements AfterViewInit, DoCheck {
             x : tileX + this.state.viewportOrigin.x - ((this.state.tilesInViewport - 1)/2),
             y: tileY + this.state.viewportOrigin.y - ((this.state.tilesInViewport - 1)/2)
           };
-          let material = this.state.whatsAt(tileInGameLocation);
-
-
+          let material = this.state.whatsAtMemoized(tileInGameLocation);
           for (let dotX = 0; dotX < this.state.dotsPerTile; dotX++){
             for (let dotY = 0; dotY < this.state.dotsPerTile; dotY++){
-
-              let color = (material == Material.Grass) ? (
-                ((dotX + dotY) % 2 == 0) ? '#151' : '#797'
-              ): (
-                ((dotX + dotY) % 2 == 0) ? '#ccf' : '#bbe'
-              );
-
+              let color;
+                if (material == Material.Grass) {
+                  color = ((dotX + dotY) % 2 == 0) ? '#151' : '#797'
+                } else if (material == Material.Shallows){
+                  color = ((dotX + dotY) % 2 == 0) ? '#cde' : '#abd'
+                } else {
+                  color = ((dotX + dotY) % 2 == 0) ? '#88d' : '#99c'
+                }
               this.ctx.fillStyle = color;
               let drawingStartX = Math.floor(tileX * (pixelsByDot * this.state.dotsPerTile) + dotX * pixelsByDot);
               let drawingStartY = Math.floor(tileY * (pixelsByDot * this.state.dotsPerTile) + dotY * pixelsByDot);
               this.ctx.fillRect(drawingStartX, drawingStartY, Math.ceil(pixelsByDot), Math.ceil(pixelsByDot));
-
             }
           }
         }

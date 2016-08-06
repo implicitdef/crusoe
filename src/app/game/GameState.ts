@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {PerlinNoiseLib} from "./perlin-noise-lib";
 
 
 @Injectable()
@@ -8,15 +9,53 @@ export class GameState {
   tilesInViewport = 15;
   dotsPerTile = 4;
   viewportOrigin: Loc = {x: 0, y: 0};
-
-  private tilesWithGrass = [{x:0, y:0}, {x:3, y:1}];
-
-  whatsAt = (loc: Loc): Material => {
-    for (let tileWithGrass of this.tilesWithGrass){
-      if (this.areTheSame(loc, tileWithGrass)){
-        return Material.Grass;
-      }
+  private lib = new PerlinNoiseLib();
+  private materialsMemoized: Material[][] = [];
+  private getMemoizedMaterial = (loc: Loc): Material => {
+    let row = this.materialsMemoized[loc.x];
+    if (row !== undefined) {
+      return row[loc.y];
+    } else return undefined;
+  };
+  private setMemoizedMaterial = (loc: Loc, material) => {
+    let row = this.materialsMemoized[loc.x];
+    if (row === undefined){
+      row = this.materialsMemoized[loc.x] = [];
     }
+    row[loc.y] = material;
+    console.log(this.materialsMemoized);
+  };
+
+
+  constructor (){
+    this.lib.seed(Math.random());
+    window.setTimeout(() => {
+      console.log(this.lib.perlin2(10.33, 10));
+      console.log(this.lib.perlin2(11, 30));
+      console.log(this.lib.perlin2(11, 100));
+    }, 1000);
+  }
+
+
+  whatsAtMemoized = (loc: Loc): Material => {
+    let mat = this.getMemoizedMaterial(loc);
+    if (mat !== undefined) {
+      return mat;
+    }
+    mat = this.whatsAtDynamic(loc);
+    this.setMemoizedMaterial(loc, mat);
+    return mat;
+  };
+
+  private whatsAtDynamic = (loc: Loc): Material => {
+    let noiseValue = (this.lib.perlin2(
+      loc.x/10,
+      loc.y/10
+    ) + 1) / 2;
+    if (noiseValue > 0.7)
+      return Material.Grass;
+    if (noiseValue > 0.55)
+      return Material.Shallows;
     return Material.Water;
   };
 
@@ -32,6 +71,7 @@ export interface Loc {
 
 export const enum Material {
   Grass,
+  Shallows,
   Water
 }
 
