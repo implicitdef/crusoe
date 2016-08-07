@@ -3,6 +3,7 @@ import {GameState} from "../game/GameState";
 import {Scene} from "../game/scene.component";
 import {NgZone} from "@angular/core";
 import {OnInit} from "@angular/core";
+import {Input} from "@angular/core";
 
 @Component({
   selector: 'capsule',
@@ -15,13 +16,13 @@ import {OnInit} from "@angular/core";
   `],
   template: `
     <div #div>
-      <scene [sizeInPixels]="canvasSize" [state]="state"></scene>
+      <scene [sizeInPixels]="canvasSize" [state]="gameState"></scene>
     </div>
   `
 })
 export class Capsule implements OnInit {
-  constructor(private state: GameState){}
 
+  @Input() gameState: GameState;
   @ViewChild('div') div: ElementRef;
   width: Number;
   height: Number;

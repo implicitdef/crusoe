@@ -45,8 +45,6 @@ export class Scene implements AfterViewInit, DoCheck {
   redraw = () => {
 
     let dotsPerTile = 4;
-    // patterns are made for 7 dots only
-    let usePatterns = dotsPerTile == 7;
     if (this.ctx) {
       this.ctx.clearRect(0, 0, this.sizeInPixels, this.sizeInPixels);
 
@@ -56,8 +54,8 @@ export class Scene implements AfterViewInit, DoCheck {
       for (let tileX = 0; tileX < this.state.tilesInViewport; tileX++){
         for (let tileY = 0; tileY < this.state.tilesInViewport; tileY++){
           let tileInGameLocation: Loc = {
-            x : tileX + this.state.viewportOrigin.x - ((this.state.tilesInViewport - 1)/2),
-            y: tileY + this.state.viewportOrigin.y - ((this.state.tilesInViewport - 1)/2)
+            x : tileX + this.state.playerLoc.x - ((this.state.tilesInViewport - 1)/2),
+            y: tileY + this.state.playerLoc.y - ((this.state.tilesInViewport - 1)/2)
           };
           let material = this.state.whatsAtMemoized(tileInGameLocation);
           let shipIsThere = this.state.isShipThere(tileInGameLocation);
@@ -66,10 +64,8 @@ export class Scene implements AfterViewInit, DoCheck {
             for (let dotY = 0; dotY < dotsPerTile; dotY++){
 
               let color;
-              if (shipIsThere && (dotX == 1 || dotX == 2) && (dotY == 1 || dotY == 2)){
-                color = '#420';
-              } else if (material == Material.Grass) {
-                color = (dotX + dotY) % 2 == 0 ? '#151' : '#797';
+              if (material == Material.Grass) {
+                color = (dotX + dotY) % 2 == 0 ? '#151' : '#030';
               } else if (material == Material.Sand) {
                 color = (dotX + dotY) % 2 == 0 ? '#fec' : '#dca';
               } else if (material == Material.Shallows) {

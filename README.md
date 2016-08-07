@@ -1,7 +1,6 @@
 :art::shoe::necktie:
 
 
-//TODO faire un affichage d'info a propos de où on est
-//TODO faire des trucs positionnes a afficher par dessus les materials:
-//TODO faire la gestion de la navigation et du bateau ()
-//TODO reflechir au gameplay
+//TODO viser un objectif de finalisation : un proto de modele de navigation
+//TODO faire la gestion de la navigation (ne pas pouvoir aller sur les iles)
+//TODO complexifier la navigation (courants, vents, etc.)

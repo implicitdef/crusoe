@@ -8,7 +8,7 @@ export class GameState {
   // must be event !
   tilesInViewport = 15;
 
-  viewportOrigin: Loc = {x: 0, y: 0};
+  playerLoc: Loc = {x: 0, y: 0};
   private lib = new PerlinNoiseLib();
   private materialsMemoized: Material[][] = [];
   private getMemoizedMaterial = (loc: Loc): Material => {
@@ -29,9 +29,33 @@ export class GameState {
     this.lib.seed(Math.random());
   }
 
+  get texts(): string[] {
+    let t: string[] = [];
+    switch (this.playerCurrentMaterial()) {
+      case Material.DeepWater :
+        t.push("You are sailing the open sea.");
+        break;
+      case Material.Shallows :
+        t.push("You can see the sandy seabed through these shallow waters.");
+        break;
+      case Material.Sand :
+        t.push("The golden sand feels warm through your toes.");
+        break;
+      case Material.Grass :
+        t.push("Grass ! Grass everywhere !");
+        break;
+    }
+    return t;
+  }
+
+  private playerCurrentMaterial = (): Material => {
+    return this.whatsAtMemoized(this.playerLoc);
+  };
+
+
 
   isShipThere = (loc: Loc) => {
-    return this.areTheSame(loc, this.viewportOrigin);
+    return this.areTheSame(loc, this.playerLoc);
   }
 
   whatsAtMemoized = (loc: Loc): Material => {
@@ -55,7 +79,7 @@ export class GameState {
       return Material.Sand;
     if (noiseValue > 0.55)
       return Material.Shallows;
-    return Material.Water;
+    return Material.DeepWater;
   };
 
   private areTheSame = (a: Loc, b: Loc): boolean =>
@@ -71,7 +95,7 @@ export interface Loc {
 export const enum Material {
   Grass,
   Shallows,
-  Water,
+  DeepWater,
   Sand
 }
 
